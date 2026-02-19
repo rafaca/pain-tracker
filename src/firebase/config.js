@@ -1,0 +1,32 @@
+import { initializeApp } from "firebase/app";
+import { getAuth, GoogleAuthProvider } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+
+const firebaseConfig = {
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "",
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "",
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "",
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "",
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "",
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || "",
+};
+
+// Only initialize Firebase if we have a valid API key
+const hasFirebase = !!firebaseConfig.apiKey;
+
+let app = null;
+let auth = null;
+let googleProvider = null;
+let db = null;
+
+if (hasFirebase) {
+  app = initializeApp(firebaseConfig);
+  auth = getAuth(app);
+  googleProvider = new GoogleAuthProvider();
+  db = getFirestore(app);
+} else {
+  console.warn("Firebase not configured — auth and persistence disabled. Add VITE_FIREBASE_* env vars to enable.");
+}
+
+export { auth, googleProvider, db, hasFirebase };
+export default app;
