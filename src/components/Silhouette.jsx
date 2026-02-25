@@ -51,7 +51,7 @@ export default function Silhouette({
             const color = intensityToColor(pt.intensity);
             const glowSize = pt.intensity * 0.04;
             return (
-              <g key={pt.id}>
+              <g key={pt.id} className="pain-dot">
                 {/* Colored circle with glow */}
                 <circle
                   cx={`${pt.x}%`}
