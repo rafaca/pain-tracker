@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import PainDial, { intensityToColor } from "./PainDial";
+import FaceToggle, { intensityToColor } from "./FaceToggle";
 
 export default function Silhouette({
   gender,
@@ -100,7 +100,7 @@ export default function Silhouette({
 
         {/* Active dial (being adjusted) */}
         {activeDial && (
-          <PainDial
+          <FaceToggle
             point={activeDial}
             onIntensityChange={onIntensityChange}
             onConfirm={onConfirmPoint}
