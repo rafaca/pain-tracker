@@ -67,7 +67,7 @@ body {
   .pain-dot {
     transform-box: fill-box;
     transform-origin: center;
-    transform: scale(3);
+    transform: scale(2.25);
   }
 }
 
