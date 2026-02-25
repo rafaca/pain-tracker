@@ -1,5 +1,27 @@
-import { useRef, useCallback, useEffect } from "react";
+import { useRef, useCallback, useEffect, useState } from "react";
 import { interpolate } from "flubber";
+
+/* ── Web Audio "aw" placeholder (sine sweep) ── */
+let audioCtx = null;
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+function playTick(intensity) {
+  try {
+    const ctx = getAudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    // Lower pitch at low pain, higher at high pain (voice "aw" placeholder)
+    osc.frequency.value = 180 + (intensity / 10) * 400;
+    osc.type = "sine";
+    gain.gain.setValueAtTime(0.15, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + 0.12);
+  } catch { /* silent fallback */ }
+}
 
 /* ── 6 face states: green → lime → yellow → gold → orange → red ── */
 const faces = [
@@ -88,8 +110,17 @@ function angleToPain(a) {
 export default function FaceToggle({ point, onIntensityChange, onConfirm, onRemove }) {
   const svgRef = useRef(null);
   const dragging = useRef(false);
+  const lastVal = useRef(point.intensity);
 
   const intensity = point.intensity;
+
+  /* Play tick sound on value change */
+  useEffect(() => {
+    if (intensity !== lastVal.current) {
+      playTick(intensity);
+      lastVal.current = intensity;
+    }
+  }, [intensity]);
   const face = getFaceState(Math.max(1, intensity));
   const faceColor = rgb(face.col);
 
@@ -139,13 +170,12 @@ export default function FaceToggle({ point, onIntensityChange, onConfirm, onRemo
 
   return (
     <div
-      className="pain-dial absolute z-50 flex items-center justify-center"
+      className="pain-dial absolute z-50 flex items-center justify-center
+                 h-[90px] w-[90px] md:h-[225px] md:w-[225px]"
       style={{
         left: `${point.x}%`,
         top: `${point.y}%`,
         transform: "translate(-50%, -50%)",
-        width: "90px",
-        height: "90px",
       }}
     >
       <svg

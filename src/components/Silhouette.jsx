@@ -78,21 +78,6 @@ export default function Silhouette({
                 >
                   {pt.intensity}
                 </text>
-                {/* Body part label */}
-                {pt.bodyPart && (
-                  <text
-                    x={`${pt.x}%`}
-                    y={`${pt.y + 3.5}%`}
-                    textAnchor="middle"
-                    dominantBaseline="central"
-                    fill="rgba(255,255,255,0.85)"
-                    fontSize="3"
-                    fontWeight="500"
-                    style={{ userSelect: "none", pointerEvents: "none" }}
-                  >
-                    {pt.bodyPart}
-                  </text>
-                )}
               </g>
             );
           })}
