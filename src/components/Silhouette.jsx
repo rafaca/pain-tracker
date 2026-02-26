@@ -58,7 +58,7 @@ export default function Silhouette({
                   cy={`${pt.y}%`}
                   r="8"
                   fill={color}
-                  opacity="0.85"
+                  opacity="1"
                   filter="url(#pointGlow)"
                   style={{
                     filter: `drop-shadow(0 0 ${glowSize}px ${color})`,
